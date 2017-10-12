@@ -1,0 +1,23 @@
+{
+  "name": "image-search",
+  "version": "1.0.0",
+  "description": "An API that allows the user to search for images and returns the results in JSON format",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt-dobie/image-search.git"
+  },
+  "author": "Matthew Dobie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matt-dobie/image-search/issues"
+  },
+  "homepage": "https://github.com/matt-dobie/image-search#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongodb": "^2.2.31"
+  }
+}
