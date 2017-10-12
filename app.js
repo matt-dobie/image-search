@@ -22,7 +22,6 @@ var DB_PASSWORD = process.env.DB_PASSWORD;
 var mongoURL = "mongodb://" + DB_USER + ":" + DB_PASSWORD + "@ds041164.mlab.com:41164/image-search";
 var db;
 
-
 // Connect to mongo and listen for requests
 mongo.connect(mongoURL, function(err, database) {
   if (err) return console.log(err);
@@ -95,7 +94,27 @@ app.get('/search/:search*', function(req, res) {
 
 // Get latest searches
 app.get('/latest', function(req, res) {
-  res.json({history: "yes"});
+
+  db.collection('history').find(
+    {},
+    {
+      _id: 0,
+      search_term: 1,
+      time: 1
+    }
+  ).toArray(function(err, arr) {
+    if (err) {
+      res.send({Error: err});
+    }
+    else {
+      if (arr.length > 10) {
+        arr = arr.slice(arr.length - 10);
+      }
+      arr.reverse();
+      res.send(arr);
+    }
+  });
+
 });
 
 // Respond not found to all the wrong routes
