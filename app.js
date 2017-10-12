@@ -8,6 +8,7 @@
 // Imports
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
+require('dotenv').config();
 
 // Variables
 var app = express();
