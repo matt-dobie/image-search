@@ -46,7 +46,10 @@ app.get('/search/:search*', function(req, res) {
   var query = req.params.search;
 
   // Save search
-  //saveSearch();
+  db.collection('history').insert({
+    search_term: query,
+    time: new Date().toString()
+  });
 
   // Determine offset
   var offset = 1;
@@ -109,3 +112,4 @@ app.use(function(err, req, res, next) {
       .send(err.message || 'SERVER ERROR');
   }  
 });
+
