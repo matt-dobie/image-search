@@ -8,6 +8,7 @@
 // Imports
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
+var request = require('request');
 require('dotenv').config();
 
 // Variables
@@ -40,8 +41,53 @@ app.get('/', function(req, res) {
 });
 
 // Get call to search for images
-app.get('/search/*', function(req, res) {
-  res.json({searching: "yes"});
+app.get('/search/:search*', function(req, res) {
+
+  var query = req.params.search;
+
+  // Save search
+  //saveSearch();
+
+  // Determine offset
+  var offset = 1;
+  if (req.query.offset) {
+    offset = parseInt(req.query.offset) * 10;
+  }
+
+  // Search and display results
+  var searchURL = "https://www.googleapis.com/customsearch/v1?"
+  + "key=" + KEY
+  + "&cx=" + CX
+  + "&searchType=image"
+  + "&q=" + query
+  + "&start=" + offset;
+
+  request.get(searchURL, function(err, data) {
+    if (err) {
+      res.send({Error: err});
+    }
+    else {
+      var results = JSON.parse(data.body);
+      var list = results.items;
+      if (list) {
+        var images = [];
+        for (var i = 0; i < list.length; i++) {
+          var imageDetails = {
+            url: list[i].link,
+            snippet: list[i].snippet,
+            thumbnail: list[i].image.thumbnailLink,
+            context: list[i].image.contextLink
+          };
+          images.push(imageDetails);
+        }
+        res.send(images);
+      }
+      else {
+        res.send({Error: "No results!"});
+      }
+    }
+  });
+
 });
 
 // Get latest searches
@@ -62,4 +108,4 @@ app.use(function(err, req, res, next) {
       .type('txt')
       .send(err.message || 'SERVER ERROR');
   }  
-})
+});
