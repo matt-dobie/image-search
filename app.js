@@ -12,22 +12,24 @@ require('dotenv').config();
 
 // Variables
 var app = express();
-var port = process.env.PORT || 8080;
-var root = "https://fcc-image-search-md.glitch.me/";
-//var mongoURL = process.env.MONGO_URL;
+var PORT = process.env.PORT || 8080;
+var ROOT = "https://fcc-image-search-md.glitch.me/";
+var CX = process.env.CX;
+var KEY = process.env.KEY;
+var DB_USER = process.env.DB_USER;
+var DB_PASSWORD = process.env.DB_PASSWORD;
+var mongoURL = "mongodb://" + DB_USER + ":" + DB_PASSWORD + "@ds041164.mlab.com:41164/image-search";
 var db;
 
 
-app.listen(port, function() {
-    console.log("Listening on port " + port + "...");
-  });
-
 // Connect to mongo and listen for requests
-/*mongo.connect(mongoURL, function(err, database) {
+mongo.connect(mongoURL, function(err, database) {
   if (err) return console.log(err);
   db = database;
-  
-});*/
+  app.listen(PORT, function() {
+    console.log("Listening on port " + PORT + "...");
+  });
+});
 
 // Serve static index page
 app.use(express.static('public'));
